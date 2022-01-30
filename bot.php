@@ -5,7 +5,7 @@ $a = ["iewil","mysticsclicks","1.0"];
 $reg = "https://bit.ly/3g6TJjw";
 $yt = "https://youtube.com/c/iewil";
 $server = "https://pastebin.com/raw/5mri6gAM";
-$disable = col("Script mati karena web update / scam!","m")."\nSupport Channel saya dengan cara\nSubscribe ".col("https://www.youtube.com/c/iewil","k")."\nkarena subscribe itu gratis :D\nUntuk mendapatkan info Script terbaru\nJoin grub via telegram ~> ".col("https://t.me/Iewil_G","c")."\nðŸ‡®ðŸ‡© ".col("Family-Team-Function-INDO","b")."\n";//Short();bn();
+$disable = col("Script mati karena web update / scam!","m")."\nSupport Channel saya dengan cara\nSubscribe ".col("https://www.youtube.com/c/iewil","k")."\nkarena subscribe itu gratis :D\nUntuk mendapatkan info Script terbaru\nJoin grub via telegram ~> ".col("https://t.me/Iewil_G","c")."\nðŸ‡®ðŸ‡© ".col("Family-Team-Function-INDO","b")."\n";Short();bn();
 
 function head(){
 	$user="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36";
@@ -42,7 +42,7 @@ function verif($csrf,$token,$id){
 }
 
 cookie:
-//Save('Cookie');Save('User_Agent');
+Save('Cookie');Save('User_Agent');
 system("termux-open-url ".$yt);
 bn();
 
