@@ -18,6 +18,14 @@ function head(){
 function host(){
 	return "http://mysticsclicks.info";
 }
+function login(){
+	$url=host()."/login";
+	return Run($url,head());
+}
+function auth($csrf,$email,$pass){
+	$url=host()."/auth/login";
+	http_build_query(["csrf_token_name"=>$csrf,"email"=>$email,"password"=>$pass,"captcha"=>"recaptchav2","g-recaptcha-response"=>""]);
+}
 function dash(){
 	$url=host()."/dashboard";
 	$r = Run($url,head());
@@ -28,19 +36,26 @@ function dash(){
 function ptc(){
 	$url=host()."/ptc";
 	$r = Run($url,head());
-	$id = explode("'",explode('/view/',$r)[1])[0];
-	return $id;
+	return $r;
 }
 function view($id){
 	$url=host()."/ptc/view/".$id;
-	return Run($url,head());
+	return Run($url,array_merge(head(),array("refferer: ".$url)));
 }
 function verif($csrf,$token,$id){
 	$url=host()."/ptc/verify/".$id;
 	$data="captcha=recaptchav2&g-recaptcha-response=&csrf_token_name=".$csrf."&token=".$token;
 	return Run($url,head(),$data);
 }
-
+function faucet(){
+	$url=host()."/faucet";
+	return Run($url,head());
+}
+function vfaucet($bot1,$bot2,$bot3,$csrf,$token){
+	$url=host()."/faucet/verify";
+	$data="antibotlinks=+".$bot1."+".$bot2."+".$bot3."&csrf_token_name=".$csrf."&token=".$token."&captcha=recaptchav2&g-recaptcha-response=";
+	return Run($url,head(),$data);
+}
 cookie:
 Save('Cookie');Save('User_Agent');
 system("termux-open-url ".$yt);
@@ -51,22 +66,58 @@ echo col('Username ~> ','h').col($r1[0],"k")."\n";
 echo col('Balance ~> ','h').col($r1[1],"k")." USD\n";
 line();
 menu:
-echo col("1 >","m")." Ptc\n";
-echo col("2 >","m")." Update Cookie\n";
+echo col("1 >","m")." faucet\n";
+echo col("2 >","m")." Ptc\n";
+echo col("3 >","m")." Update Cookie\n";
 $pil=readline(col("Input Number ","h").col("> ","m"));
 line();
-if($pil==1){goto ptc;
-}elseif($pil==2){unlink($a[1]."/Cookie");goto cookie;
+if($pil==1){goto faucet;
+}elseif($pil==2){goto ptc;
+}elseif($pil==3){unlink($a[1]."/Cookie");goto cookie;
 }else{echo col("Bad Number\n","m")."\n";line();goto menu;}
 
-ptc:
+faucet:
 while(true){
-	$id=ptc();
+	$r1=faucet();
+	$left=explode('/',explode('<p class="lh-1 mb-1 font-weight-bold">',$r1)[3])[0];
+	if($left=='0'){
+		echo col('you reach max claim! come back tomorrow','m')."\n";line();
+		goto menu;
+	}
+	$leftt=$left-1;
+	$tmr=explode(';',explode('var wait=',$r1)[1])[0];
+	if($tmr){
+		tmr($tmr);goto faucet;
+	}
+	sleep(10);
+	$bot=explode('" rel=\"',$r1);
+	$bot1=explode('\"',$bot[1])[0];
+	$bot2=explode('\"',$bot[2])[0];
+	$bot3=explode('\"',$bot[3])[0];
+	$csrf=explode('">',explode('_token_name" id="token" value="',$r1)[1])[0];
+	$token=explode('">',explode('name="token" value="',$r1)[1])[0];
+	$r2=vfaucet($bot1,$bot2,$bot3,$csrf,$token);
+	$ss=explode("'",explode("Swal.fire('Good job!','",$r2)[1])[0];
+	if($ss){
+		echo col("Success ~> ","h").col($ss,"k")."\n";
+	    echo col("Balance ~> ","h").col(dash()[1],"k")."\n";
+	}else{
+		echo "\r";
+	    echo col("Invalid Captcha","m");sleep(2);echo "\r";
+	}
+}
+ptc:
+$nom=1;
+while(true){
+	$r=ptc();
+	$link=explode('</h5>',explode('<h5 class="card-title">',$r)[$nom])[0];
+	$id = explode("'",explode('/view/',$r)[$nom])[0];
 	if($id){
 		$r2=view($id);
 		$tmr=explode(';',explode('var timer=',$r2)[1])[0];
-		$csrf=explode('">',explode('name="csrf_token_name" value="',$r2)[1])[0];//488cc5a5697b4f7c86a63b3ecb39548e
-	    $token=explode('">',explode('<input type="hidden" name="token" value="',$r2)[1])[0];//oYS9g1RptOM8xniX7adJmN5QAefTPk
+		$csrf=explode('">',explode('name="csrf_token_name" value="',$r2)[1])[0];
+	    $token=explode('">',explode('<input type="hidden" name="token" value="',$r2)[1])[0];
+		echo col('Visit ~> ','k').col($link,'b')."\n";
 	    tmr($tmr);
 
 	    $r3=verif($csrf,$token,$id);
@@ -76,8 +127,8 @@ while(true){
 	    	echo col("Balance ~> ","h").col(dash()[1],"k")."\n";
 	    	line();
 	    }else{
-	    	echo "\r";
-	    	echo col("Invalid Captcha","m");sleep(2);echo "\r";
+	    	echo col("Link Error","m");sleep(2);echo "\n";line();
+			$nom=$nom+1;
 	    }
 	}else{
 		echo col('Ptc habis','m')."\n";line();goto menu;
