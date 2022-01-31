@@ -4,12 +4,12 @@ $zone = json_decode(file_get_contents("http://ip-api.com/json"),1)["timezone"];i
 $a = ["iewil","mysticsclicks","1.0"];
 $reg = "https://bit.ly/3g6TJjw";
 $yt = "https://youtube.com/c/iewil";
-$server = "https://pastebin.com/raw/5mri6gAM";
+$server = "https://pastebin.com/raw/JGzBgSKe";
 $disable = col("Script mati karena web update / scam!","m")."\nSupport Channel saya dengan cara\nSubscribe ".col("https://www.youtube.com/c/iewil","k")."\nkarena subscribe itu gratis :D\nUntuk mendapatkan info Script terbaru\nJoin grub via telegram ~> ".col("https://t.me/Iewil_G","c")."\nðŸ‡®ðŸ‡© ".col("Family-Team-Function-INDO","b")."\n";Short();bn();
 
 function head(){
-	$user="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36";
-	$cookie="csrf_cookie_name=0cc4d5592e4ab18aece9da6f9d1ce5ba; ci_session=73c76378e59bb8e2fbde4fb4bde8dff886495641";
+	$user=Save('User_Agent');
+	$cookie=Save('Cookie');
 	return [
 	"user-agent: ".$user,
 	"cookie: ".$cookie
@@ -92,12 +92,4 @@ function Col($str,$color){if($color=="rand"){$color=['h','k','b','u','m'][array_
 function Slow($msg){$slow = str_split($msg);foreach( $slow as $slowmo ){echo $slowmo; usleep(70000);}}
 function Line(){$len = 36;$var = '─';echo str_repeat($var,$len)."\n";}
 function Bn(){global $a,$reg;system('clear');$m="\033[1;31m";$p="\033[1;37m";$k="\033[1;33m";$h="\033[1;32m";$u="\033[1;35m";$b="\033[1;34m";$c="\033[1;36m";$mp="\033[101m\033[1;37m";$cl="\033[0m";$mm="\033[101m\033[1;31m";$hp="\033[1;7m";$z=trim(strtoupper($a[1]));$x=18;$y=strlen($z);$line=str_repeat('_',$x-$y);echo "\n{$m}[{$p}Script{$m}]->{$k}[".$h.$z."{$k}]-[".$h.$a[2].$k."]".$p.$line.".\n{$u}.__              .__.__ 	    {$p}| \n{$u}|__| ______  _  _|__|  |	\n|  |/ __ \ \/ \/ /  |  |\n|  \  ___/\     /|  |  |__\n|__|\___  >\/\_/ |__|____/\n        \/\n{$mm}[{$mp}▶{$mm}]{$cl} {$k}https://www.youtube.com/c/iewil\n{$c}{$hp} >_{$cl}{$b} Team-Function-INDO\n{$p}────────────────────────────────────\nLink Reg : ".$reg."\n\n";}
-function Vision($img){$content=base64_encode(file_get_contents($img));$head=["content-type: application/json"];$data=json_encode(["requests"=>[["image"=>["content"=>$content],"features"=>[["type"=>"TEXT_DETECTION"]]]]]);$result=Run("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyC3y-Em42htSB8UEZPqptJ78rlvL58_h6Y",$head,$data);$respon=strpos($result,'Enter the following:\n');if($respon){$respon=substr($result,$respon);$respon=str_replace('Enter the following:\n','',$respon);$respon= preg_replace("/[^a-zA-Z]/", "",str_replace('\n','',substr($respon,strpos($respon,'"'))));}if(strlen($respon) > 25){}else{return $respon;}}
-function Ocr($img,$img2){$apikey=Aocr();$respon=Vision($img);if($respon==null){system('convert '.$img.' -gravity North -chop x15 '.$img2.' 2>/dev/null');$hasil=json_decode(shell_exec('curl --silent -H "apikey:'.$apikey.'" --form "file=@'.$img2.'" --form "language=eng" --form "ocrengine=2" --form "isOverlayRequired=false" --form "iscreatesearchablepdf=false" https://api.ocr.space/Parse/Image'))->ParsedResults[0]->ParsedText;$respon = preg_replace("/[^a-zA-Z]/","", $hasil);}return $respon;}
-function Aocr(){$a = "0123456789abcdef";$b = substr(str_shuffle($a), 0, 10);$c = $b."88957";return $c;}
-function Head2(){$ua=Save('User_Agent');$h=["Host: api-secure.solvemedia.com","user-agent: ".$ua];return $h;}
-function Gsolv($url,$ref){$arr=["accept: */*","referer: ".$ref,"accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"];$r=Run($url,array_merge(Head2(),$arr));$ca=explode('"',$r)[5];return $ca;}
-function Gmed($ca,$ref){$url="https://api-secure.solvemedia.com/papi/media?c=".$ca.";w=300;h=150;fg=000000;bg=f8f8f8";$arr=["accept: image/webp,image/apng,image/*,*/*;q=0.8","referer: ".$ref,"accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"];$r=Run($url,array_merge(Head2(),$arr));return $r;}
-function Build($a){return http_build_query($a);}
-function RecaptchaV2($siteurl,$sitekey,$apikey){$ua=["Host: api.anycaptcha.com","Content-Type: application/json"];$data=json_encode(array("clientKey"=>$apikey,"task"=>array("type"=>"RecaptchaV2TaskProxyless","websiteURL"=>$siteurl,"websiteKey"=>$sitekey,"isInvisible"=>false)));$Create=json_decode(Run('https://api.anycaptcha.com/createTask',$ua,$data));if($Create->errorId == '1'){return 0;}else{$Task=$Create->taskId;while(true){$base=json_encode(array("clientKey"=>$apikey,"taskId"=>$Task));$Result=json_decode(Run('https://api.anycaptcha.com/getTaskResult',$ua,$base));if($Result->status=='processing'){sleep(5);continue;}return $Result->solution->gRecaptchaResponse;}}}
 function Tmr($tmr){$timr=time()+$tmr;while(true){echo "\r                       \r";$res=$timr-time(); if($res < 1){break;}echo col(date('i:s',$res),"rand");sleep(1);}}
