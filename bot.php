@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 $zone = json_decode(file_get_contents("http://ip-api.com/json"),1)["timezone"];if($zone){date_default_timezone_set($zone);}
-$a = ["iewil","mysticsclicks","1.0"];
+$a = ["iewil","mysticsclicks","1.1"];
 $reg = "https://bit.ly/3g6TJjw";
 $yt = "https://youtu.be/xaG7vqgXJ_0";
 $server = "https://pastebin.com/raw/JGzBgSKe";
