@@ -73,7 +73,7 @@ while(true){
 	    $ss=explode('has',explode("Swal.fire('Good job!','",$r3)[1])[0];
 	    if($ss){
 	    	echo col("Success ~> ","h").col($ss,"k")."\n";
-	    	echo col("Balance ~> ","h").col($ss,"k")."\n";
+	    	echo col("Balance ~> ","h").col(dash()[1],"k")."\n";
 	    	line();
 	    }else{
 	    	echo "\r";
